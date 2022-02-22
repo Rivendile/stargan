@@ -37,8 +37,10 @@ class CelebA(data.Dataset):
             self.idx2attr[i] = attr_name
 
         lines = lines[2:]
-        random.seed(1234)
-        random.shuffle(lines)
+        # random.seed(1234)
+        # random.shuffle(lines)
+        cnt_male = 0
+        cnt_female = 0
         for i, line in enumerate(lines):
             split = line.split()
             filename = split[0]
@@ -49,10 +51,22 @@ class CelebA(data.Dataset):
                 idx = self.attr2idx[attr_name]
                 label.append(values[idx] == '1')
 
-            if (i+1) < 2000:
-                self.test_dataset.append([filename, label])
+            # if (i+1) < 2000:
+            #     self.test_dataset.append([filename, label])
+            # else:
+            #     self.train_dataset.append([filename, label])
+            if label[0]==1: #male
+                if cnt_male<68261:
+                    cnt_male += 1
+                    self.train_dataset.append([filename, label])
+                else:
+                    self.test_dataset.append([filename, label])
             else:
-                self.train_dataset.append([filename, label])
+                if cnt_female<94509:
+                    cnt_female += 1
+                    self.train_dataset.append([filename, label])
+                else:
+                    self.test_dataset.append([filename, label])
 
         print('Finished preprocessing the CelebA dataset...')
 

@@ -539,13 +539,17 @@ class Solver(object):
                 c_trg_list = self.create_labels(c_org, self.c_dim, self.dataset, self.selected_attrs)
 
                 # Translate images.
-                x_fake_list = [x_real]
+                x_fake_list = []
                 for c_trg in c_trg_list:
                     x_fake_list.append(self.G(x_real, c_trg))
 
                 # Save the translated images.
                 x_concat = torch.cat(x_fake_list, dim=3)
-                result_path = os.path.join(self.result_dir, '{}-images.jpg'.format(i+1))
+                result_path = os.path.join(self.result_dir, '{}-images-fake.jpg'.format(i+1))
+                save_image(self.denorm(x_concat.data.cpu()), result_path, nrow=1, padding=0)
+
+                x_concat = torch.cat([x_real], dim=3)
+                result_path = os.path.join(self.result_dir, '{}-images-real.jpg'.format(i+1))
                 save_image(self.denorm(x_concat.data.cpu()), result_path, nrow=1, padding=0)
                 print('Saved real and fake images into {}...'.format(result_path))
 
