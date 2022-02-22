@@ -1,6 +1,6 @@
 #! /bin/bash
 
-git clone https://github.com/yunjey/StarGAN.git
+git clone https://github.com/Rivendile/stargan.git
 cd stargan/
 
 # env
